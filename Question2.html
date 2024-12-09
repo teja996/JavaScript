@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Filter Sales</title>
+    <style>
+        table {
+            width: 35%;
+            margin: 30px auto;
+            border: 1px solid black;
+            border-spacing: 5px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        th,
+        td {
+            border: 1px solid gray;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            font-weight: bold;
+        }
+
+        .filter-container {
+            text-align: center;
+            margin: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="filter-container">
+        <label for="filterRegion">Region:</label>
+        <select id="filterRegion">
+            <option value="all">All</option>
+            <option value="US">US</option>
+            <option value="EU">EU</option>
+            <option value="CA">CA</option>
+        </select>
+
+        <label for="filterModel">Model:</label>
+        <select id="filterModel">
+            <option value="all">All</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+        </select>
+    </div>
+    <table id="filteredSalesTable">
+        <thead>
+            <tr>
+                <th>Region</th>
+                <th>Model</th>
+                <th>Sales</th>
+            </tr>
+        </thead>
+        <tbody id="salesRows"></tbody>
+    </table>
+
+    <script>
+        const salesInfo = [
+            { region: 'US', model: 'A', sales: 150 },
+            { region: 'US', model: 'B', sales: 120 },
+            { region: 'US', model: 'C', sales: 350 },
+            { region: 'EU', model: 'A', sales: 200 },
+            { region: 'EU', model: 'B', sales: 100 },
+            { region: 'EU', model: 'C', sales: 250 },
+            { region: 'CA', model: 'A', sales: 200 },
+            { region: 'CA', model: 'B', sales: 100 },
+            { region: 'CA', model: 'C', sales: 230 },
+            { region: 'CA', model: 'D', sales: 400 },
+        ];
+
+        const tableBody = document.getElementById('salesRows');
+
+        function updateTable(data) {
+            tableBody.innerHTML = data.map(entry =>
+                `<tr>
+                    <td>${entry.region}</td>
+                    <td>${entry.model}</td>
+                    <td>${entry.sales}</td>
+                </tr>`
+            ).join('');
+        }
+
+        function applyFilters() {
+            const selectedRegion = document.getElementById('filterRegion').value;
+            const selectedModel = document.getElementById('filterModel').value;
+
+            const filteredData = salesInfo.filter(entry =>
+                (selectedRegion === 'all' || entry.region === selectedRegion) &&
+                (selectedModel === 'all' || entry.model === selectedModel)
+            );
+
+            updateTable(filteredData);
+        }
+
+        document.getElementById('filterRegion').addEventListener('change', applyFilters);
+        document.getElementById('filterModel').addEventListener('change', applyFilters);
+
+        updateTable(salesInfo);
+    </script>
+</body>
+
+</html>

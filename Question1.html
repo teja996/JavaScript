@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sales Summary</title>
+    <style>
+        table {
+            width: 35%;
+            border-spacing: 4px;
+            border: 2px solid black;
+            margin: 25px auto;
+            font-family: Verdana, sans-serif;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <table id="salesData">
+        <thead>
+            <tr>
+                <th>Region</th>
+                <th>Model</th>
+                <th>Sales</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+
+    <script>
+        const salesData = [
+            { region: 'US', model: 'A', sales: 150 },
+            { region: 'US', model: 'B', sales: 120 },
+            { region: 'US', model: 'C', sales: 350 },
+            { region: 'EU', model: 'A', sales: 200 },
+            { region: 'EU', model: 'B', sales: 100 },
+            { region: 'EU', model: 'C', sales: 250 },
+            { region: 'CA', model: 'A', sales: 200 },
+            { region: 'CA', model: 'B', sales: 100 },
+            { region: 'CA', model: 'C', sales: 230 },
+            { region: 'CA', model: 'D', sales: 400 },
+        ];
+
+        const tbody = document.getElementById('tableBody');
+
+        function renderTable(data) {
+            const totals = {};
+
+            data.forEach(entry => {
+                totals[entry.region] = (totals[entry.region] || 0) + entry.sales;
+            });
+
+            const formattedData = [];
+            const uniqueRegions = [...new Set(data.map(entry => entry.region))];
+
+            uniqueRegions.forEach(region => {
+                const regionEntries = data.filter(entry => entry.region === region);
+                formattedData.push({ region, model: 'Total', sales: totals[region] });
+                formattedData.push(...regionEntries);
+            });
+
+            tbody.innerHTML = formattedData.map(entry =>
+                `<tr>
+                    <td>${entry.region}</td>
+                    <td>${entry.model}</td>
+                    <td>${entry.sales}</td>
+                </tr>`
+            ).join('');
+        }
+
+        renderTable(salesData);
+    </script>
+</body>
+
+</html>
